@@ -6,7 +6,7 @@ modelInfo <- list(label = "Sparse Partial Least Squares",
                                           label = c('#Components', 'Threshold', 'Kappa')),
                   grid = function(x, y, len = NULL, search = "grid"){
                     if(search == "grid") {
-                      out <- expand.grid(K = 1:min(nrow(x), ncol(x)), 
+                      out <- expand.grid(K = unique(round(seq(1, min(nrow(x), ncol(x)), length.out = len))), 
                                          eta = seq(.1, .9, length = len), 
                                          kappa = .5)
                     } else {
