@@ -6,8 +6,8 @@ modelInfo <- list(label = "Sparse Partial Least Squares",
                                           label = c('#Components', 'Threshold', 'Kappa')),
                   grid = function(x, y, len = NULL, search = "grid"){
                     if(search == "grid") {
-                      out <- expand.grid(K = unique(round(seq(1, min(nrow(x), ncol(x)), length.out = len))), 
-                                         eta = seq(.1, .9, length = len), 
+                      out <- expand.grid(K = unique(round(seq(1, min(nrow(x)/2, ncol(x)), length.out = len))),
+                                         eta = seq(.1, .9, length = len),
                                          kappa = .5)
                     } else {
                       out <- data.frame(kappa = runif(len, min = 0, max = .5),
@@ -17,7 +17,7 @@ modelInfo <- list(label = "Sparse Partial Least Squares",
                     out
                   },
                   loop = NULL,
-                  fit = function(x, y, wts, param, lev, last, classProbs, ...) { 
+                  fit = function(x, y, wts, param, lev, last, classProbs, ...) {
                     param$K <- min(param$K, length(y))
                     if(is.factor(y)) {
                       caret:::splsda(x, y, K = param$K, eta = param$eta,
@@ -25,7 +25,7 @@ modelInfo <- list(label = "Sparse Partial Least Squares",
                     } else {
                       spls::spls(x, y, K = param$K, eta = param$eta,
                                  kappa = param$kappa, ...)
-                    }          
+                    }
                   },
                   predict = function(modelFit, newdata, submodels = NULL) {
                     if(length(modelFit$obsLevels) < 2) {
